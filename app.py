@@ -6,10 +6,10 @@ from skimage import exposure, transform
 import io
 
 st.set_page_config(page_title="Preprocesamiento de Imágenes", layout="wide")
-st.title("🧠 Procesamiento Automático de Imágenes Subidas")
+st.title("Procesamiento Automático de Imágenes Subidas")
 
 uploaded_files = st.file_uploader(
-    "📁 Sube una o más imágenes", type=["png", "jpg", "jpeg"], accept_multiple_files=True
+    "Sube una o más imágenes", type=["png", "jpg", "jpeg"], accept_multiple_files=True
 )
 
 def load_image(file):
@@ -39,8 +39,8 @@ def apply_nonlinear_filter(img):
 
 def translate_image(img):
     rows, cols = img.shape[:2]
-    dx, dy = cols // 2, rows // 2  # Mover a mitad del canvas
-    canvas_width, canvas_height = cols * 2, rows * 2  # duplicar lienzo
+    dx, dy = cols // 2, rows // 2 
+    canvas_width, canvas_height = cols * 2, rows * 2 
 
     M = np.float32([[1, 0, dx], [0, 1, dy]])
     translated = cv2.warpAffine(img, M, (canvas_width, canvas_height), borderValue=(0, 0, 0))
@@ -58,7 +58,6 @@ def mostrar_imagen(imagen_np, caption="", ancho=None):
     img_pil.save(buf, format="PNG")
     st.image(buf.getvalue(), caption=caption, width=ancho if ancho else None)
 
-# Procesar imágenes
 if uploaded_files:
     for file in uploaded_files:
         st.markdown("---")
@@ -66,34 +65,30 @@ if uploaded_files:
         img = load_image(file)
 
         col1, col2, col3 = st.columns([1, 0.1, 2])
-        # Ancho fijo base para original y transformaciones iguales
         ANCHO_BASE = 300
 
         with col1:
-            mostrar_imagen(img, caption=f"🖼️ Original - {img.shape[1]}x{img.shape[0]}", ancho=ANCHO_BASE)
+            mostrar_imagen(img, caption=f"Original - {img.shape[1]}x{img.shape[0]}", ancho=ANCHO_BASE)
 
         with col3:
-            # AGRANDADO (más grande)
             img_big = resize_image(img, 2.0)
-            mostrar_imagen(img_big, caption=f"🔍 Reescalado (Agrandado) - {img_big.shape[1]}x{img_big.shape[0]}", ancho=ANCHO_BASE * 2)
+            mostrar_imagen(img_big, caption=f"Reescalado (Agrandado) - {img_big.shape[1]}x{img_big.shape[0]}", ancho=ANCHO_BASE * 2)
 
-            # REDUCIDO (más pequeño)
             img_small = resize_image(img, 0.5)
-            mostrar_imagen(img_small, caption=f"🔽 Reescalado (Reducido) - {img_small.shape[1]}x{img_small.shape[0]}", ancho=ANCHO_BASE // 2)
+            mostrar_imagen(img_small, caption=f"Reescalado (Reducido) - {img_small.shape[1]}x{img_small.shape[0]}", ancho=ANCHO_BASE // 2)
 
-            # TODAS LAS DEMÁS con mismo tamaño que original
             img_eq = equalize_image(img)
-            mostrar_imagen(img_eq, caption="🌈 Ecualización", ancho=ANCHO_BASE)
+            mostrar_imagen(img_eq, caption="Ecualización", ancho=ANCHO_BASE)
 
             img_linear = apply_linear_filter(img)
-            mostrar_imagen(img_linear, caption="📏 Filtro Lineal", ancho=ANCHO_BASE)
+            mostrar_imagen(img_linear, caption="Filtro Lineal", ancho=ANCHO_BASE)
 
             img_nonlinear = apply_nonlinear_filter(img)
-            mostrar_imagen(img_nonlinear, caption="📐 Filtro No Lineal", ancho=ANCHO_BASE)
+            mostrar_imagen(img_nonlinear, caption="Filtro No Lineal", ancho=ANCHO_BASE)
 
             img_translated = translate_image(img)
-            mostrar_imagen(img_translated, caption="↗️ Traslación", ancho=ANCHO_BASE)
+            mostrar_imagen(img_translated, caption="↗Traslación", ancho=ANCHO_BASE)
 
             img_rotated = rotate_image(img)
-            mostrar_imagen(img_rotated, caption="🔄 Rotación", ancho=ANCHO_BASE)
+            mostrar_imagen(img_rotated, caption="Rotación", ancho=ANCHO_BASE)
 
